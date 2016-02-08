@@ -524,12 +524,12 @@
     /* -------------------------------------------------------------------------- */
 
     // check if library is used as a Node.js module
-    if(typeof window !== 'undefined') {
+    if(typeof window !== 'undefined' || typeof self != 'undefined') {
 
         // store navigator properties to use later
-        var userAgent = 'navigator' in window && 'userAgent' in navigator && navigator.userAgent.toLowerCase() || '';
-        var vendor = 'navigator' in window && 'vendor' in navigator && navigator.vendor.toLowerCase() || '';
-        var appVersion = 'navigator' in window && 'appVersion' in navigator && navigator.appVersion.toLowerCase() || '';
+        var userAgent = 'navigator' in root && 'userAgent' in navigator && navigator.userAgent.toLowerCase() || '';
+        var vendor = 'navigator' in root && 'vendor' in navigator && navigator.vendor.toLowerCase() || '';
+        var appVersion = 'navigator' in root && 'appVersion' in navigator && navigator.appVersion.toLowerCase() || '';
 
         // is current browser chrome?
         is.chrome = function() {
@@ -549,10 +549,10 @@
         // parameter is optional
         is.ie = function(version) {
             if(!version) {
-                return /msie/i.test(userAgent) || "ActiveXObject" in window;
+                return /msie/i.test(userAgent) || "ActiveXObject" in root;
             }
             if(version >= 11) {
-                return "ActiveXObject" in window;
+                return "ActiveXObject" in root;
             }
             return new RegExp('msie ' + version).test(userAgent);
         };
@@ -700,7 +700,7 @@
 
         // is current device supports touch?
         is.touchDevice = function() {
-            return 'ontouchstart' in window ||'DocumentTouch' in window && document instanceof DocumentTouch;
+            return 'ontouchstart' in root ||'DocumentTouch' in root && document instanceof DocumentTouch;
         };
         // touchDevice method does not support 'all' and 'any' interfaces
         is.touchDevice.api = ['not'];
